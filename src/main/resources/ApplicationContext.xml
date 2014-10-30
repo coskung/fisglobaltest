@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+<bean id="mapBasedMapper" class="com.hcghost.fisglobaltest.MapBasedMapper" 
+      scope="singleton">
+   </bean>
+   <bean id="mapBasedMapperFromPropertiesFile" class="com.hcghost.fisglobaltest.MapBasedMapperFromPropertiesFile" 
+      scope="singleton">
+<!--    <context:property-placeholder location="classpath*:mapping.properties"/>   -->
+   </bean>
+
+
+<bean id="mapSource"
+        class="com.datacert.core.spring.CustomResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>mapping</value>
+            </list>
+        </property>
+</bean>
+
+
+<bean class="com.hcghost.fisglobaltest.MapBasedMapperFromPropertiesFileJNDI">
+ <property name="mapping">
+  <bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+   <property name="location">
+    <bean class="org.springframework.core.io.UrlResource">
+     <constructor-arg>
+      <bean class="org.springframework.jndi.JndiObjectFactoryBean">
+       <property name="jndiName" value="java:comp/env/url/mappingPropertiesURL" />
+      </bean>
+     </constructor-arg>
+    </bean>
+   </property>
+  </bean>
+ </property>
+</bean>
+
+
+
+</beans>
